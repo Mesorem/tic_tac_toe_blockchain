@@ -1,0 +1,14 @@
+syntax = "proto3";
+package mesorem.ttt_blockchain.tttblockchain;
+
+import "gogoproto/gogo.proto";
+import "tttblockchain/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/Mesorem/ttt_blockchain/x/tttblockchain/types";
+
+// GenesisState defines the tttblockchain module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

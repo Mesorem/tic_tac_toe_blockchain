@@ -1,0 +1,12 @@
+syntax = "proto3";
+package mesorem.ttt_blockchain.tttblockchain;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/Mesorem/ttt_blockchain/x/tttblockchain/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
