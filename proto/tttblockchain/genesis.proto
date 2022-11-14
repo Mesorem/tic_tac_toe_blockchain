@@ -3,6 +3,8 @@ package mesorem.ttt_blockchain.tttblockchain;
 
 import "gogoproto/gogo.proto";
 import "tttblockchain/params.proto";
+import "tttblockchain/system_info.proto";
+import "tttblockchain/stored_game.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/Mesorem/ttt_blockchain/x/tttblockchain/types";
@@ -10,5 +12,7 @@ option go_package = "github.com/Mesorem/ttt_blockchain/x/tttblockchain/types";
 // GenesisState defines the tttblockchain module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
+  SystemInfo systemInfo = 2 [(gogoproto.nullable) = false];
+  repeated StoredGame storedGameList = 3 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

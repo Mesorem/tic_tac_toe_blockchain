@@ -7,7 +7,18 @@ option go_package = "github.com/Mesorem/ttt_blockchain/x/tttblockchain/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc CreateGame(MsgCreateGame) returns (MsgCreateGameResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreateGame {
+  string creator = 1;
+  string cross = 2;
+  string circle = 3;
+}
+
+message MsgCreateGameResponse {
+  string gameIndex = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

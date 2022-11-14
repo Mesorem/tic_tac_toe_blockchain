@@ -1,0 +1,9 @@
+syntax = "proto3";
+package mesorem.ttt_blockchain.tttblockchain;
+
+option go_package = "github.com/Mesorem/ttt_blockchain/x/tttblockchain/types";
+
+message SystemInfo {
+  uint64 nextId = 1; 
+  
+}

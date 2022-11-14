@@ -20,10 +20,37 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
+export interface TttblockchainMsgCreateGameResponse {
+  gameIndex?: string;
+}
+
 /**
  * Params defines the parameters for the module.
  */
 export type TttblockchainParams = object;
+
+export interface TttblockchainQueryAllStoredGameResponse {
+  storedGame?: TttblockchainStoredGame[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface TttblockchainQueryGetStoredGameResponse {
+  storedGame?: TttblockchainStoredGame;
+}
+
+export interface TttblockchainQueryGetSystemInfoResponse {
+  SystemInfo?: TttblockchainSystemInfo;
+}
 
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
@@ -31,6 +58,82 @@ export type TttblockchainParams = object;
 export interface TttblockchainQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: TttblockchainParams;
+}
+
+export interface TttblockchainStoredGame {
+  index?: string;
+  board?: string;
+  turn?: string;
+  cross?: string;
+  circle?: string;
+}
+
+export interface TttblockchainSystemInfo {
+  /** @format uint64 */
+  nextId?: string;
+}
+
+/**
+* message SomeRequest {
+         Foo some_parameter = 1;
+         PageRequest pagination = 2;
+ }
+*/
+export interface V1Beta1PageRequest {
+  /**
+   * key is a value returned in PageResponse.next_key to begin
+   * querying the next page most efficiently. Only one of offset or key
+   * should be set.
+   * @format byte
+   */
+  key?: string;
+
+  /**
+   * offset is a numeric offset that can be used when key is unavailable.
+   * It is less efficient than using key. Only one of offset or key should
+   * be set.
+   * @format uint64
+   */
+  offset?: string;
+
+  /**
+   * limit is the total number of results to be returned in the result page.
+   * If left empty it will default to a value to be set by each app.
+   * @format uint64
+   */
+  limit?: string;
+
+  /**
+   * count_total is set to true  to indicate that the result set should include
+   * a count of the total number of items available for pagination in UIs.
+   * count_total is only respected when offset is used. It is ignored when key
+   * is set.
+   */
+  count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
+}
+
+/**
+* PageResponse is to be embedded in gRPC response messages where the
+corresponding request message has used PageRequest.
+
+ message SomeResponse {
+         repeated Bar results = 1;
+         PageResponse page = 2;
+ }
+*/
+export interface V1Beta1PageResponse {
+  /** @format byte */
+  next_key?: string;
+
+  /** @format uint64 */
+  total?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -240,6 +343,64 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<TttblockchainQueryParamsResponse, RpcStatus>({
       path: `/Mesorem/ttt_blockchain/tttblockchain/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryStoredGameAll
+   * @summary Queries a list of StoredGame items.
+   * @request GET:/Mesorem/ttt_blockchain/tttblockchain/stored_game
+   */
+  queryStoredGameAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<TttblockchainQueryAllStoredGameResponse, RpcStatus>({
+      path: `/Mesorem/ttt_blockchain/tttblockchain/stored_game`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryStoredGame
+   * @summary Queries a StoredGame by index.
+   * @request GET:/Mesorem/ttt_blockchain/tttblockchain/stored_game/{index}
+   */
+  queryStoredGame = (index: string, params: RequestParams = {}) =>
+    this.request<TttblockchainQueryGetStoredGameResponse, RpcStatus>({
+      path: `/Mesorem/ttt_blockchain/tttblockchain/stored_game/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySystemInfo
+   * @summary Queries a SystemInfo by index.
+   * @request GET:/Mesorem/ttt_blockchain/tttblockchain/system_info
+   */
+  querySystemInfo = (params: RequestParams = {}) =>
+    this.request<TttblockchainQueryGetSystemInfoResponse, RpcStatus>({
+      path: `/Mesorem/ttt_blockchain/tttblockchain/system_info`,
       method: "GET",
       format: "json",
       ...params,
